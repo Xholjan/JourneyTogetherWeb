@@ -1,0 +1,1 @@
+import{X as r,j as o,c as s,Y as n,Z as l,o as u}from"./Cd4Hx30b.js";const p={__name:"callback",setup(i){const t=l(),e=n(),{handleRedirectCallback:c}=r();return o(async()=>{if(e.query.code&&e.query.state)try{await c()}catch(a){console.error("Auth0 redirect callback failed:",a)}t.replace("/")}),(a,d)=>(u(),s("div",null,"Logging you in..."))}};export{p as default};

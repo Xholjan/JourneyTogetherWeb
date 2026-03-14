@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  compatibilityDate: "2025-06-17",
+  compatibilityDate: "2026-03-10",
   devtools: {
     enabled: false,
   },
@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: "Loading App...",
+      title: "Journey Together",
     },
   },
   css: [

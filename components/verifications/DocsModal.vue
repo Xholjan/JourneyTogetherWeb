@@ -1,4 +1,4 @@
-<script setup>
+<!-- <script setup>
 import { ref } from 'vue';
 import { MimeType } from '~/utils/enums/mimeType';
 import { DocType } from '~/utils/enums/docType';
@@ -150,4 +150,4 @@ const close = async () => {
             </div>
         </div>
     </Teleport>
-</template>
+</template> -->

@@ -58,6 +58,6 @@ const submitFilters = async () => {
         <VerificationsGrid :dataSource="items" @upload-doc="handleUploadSelect" @verify-person="handleVerifySelect" />
     </CommonCard>
 
-    <VerificationsDocsModal v-if="showUpload" @close="showUpload = false" :person="person" />
-    <VerificationsVerifyModal v-if="showVerify" @close="showVerify = false" @refresh="submitFilters" :person="person" />
+    <!-- <VerificationsDocsModal v-if="showUpload" @close="showUpload = false" :person="person" /> -->
+    <!-- <VerificationsVerifyModal v-if="showVerify" @close="showVerify = false" @refresh="submitFilters" :person="person" /> -->
 </template>

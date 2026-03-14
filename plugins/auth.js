@@ -1,18 +1,18 @@
-import { createAuth0Client } from "@auth0/auth0-spa-js";
+import { createAuth0 } from '@auth0/auth0-vue';
 
-export default defineNuxtPlugin(async () => {
-    const config = useRuntimeConfig();
-    const auth0 = await createAuth0Client({
+export default defineNuxtPlugin((nuxtApp) => {
+  const config = useRuntimeConfig();
+
+  const auth0 = createAuth0({
     domain: config.public.auth0Domain,
     clientId: config.public.auth0ClientId,
     authorizationParams: {
-      redirect_uri: window.location.origin
-    }
+      redirect_uri: window.location.origin + '/callback',
+      scope: 'openid profile email offline_access',
+    },
+    cacheLocation: 'localstorage',
+    useRefreshTokens: true
   });
 
-  return {
-    provide: {
-      auth0
-    }
-  };
-})
+  nuxtApp.vueApp.use(auth0);
+});

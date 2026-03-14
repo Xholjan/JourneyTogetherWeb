@@ -1,9 +1,10 @@
-export default defineNuxtRouteMiddleware(async () => {
-  const { $auth0 } = useNuxtApp()
+import { useAuth0 } from '@auth0/auth0-vue';
 
-  const logged = await $auth0.isAuthenticated()
-  debugger
-  if (!logged) {
-    await $auth0.loginWithRedirect()
+export default defineNuxtRouteMiddleware(async () => {
+  const { isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading.value) return;
+  if (!isAuthenticated.value) {
+    return navigateTo('/login');
   }
-})
+});

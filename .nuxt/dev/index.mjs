@@ -648,7 +648,7 @@ const _inlineRuntimeConfig = {
     }
   },
   "public": {
-    "axiosBase": "http://localhost:7061",
+    "axiosBase": "https://localhost:7061",
     "auth0Domain": "dev-0lb0kkcpz1t58aql.us.auth0.com",
     "auth0ClientId": "WYA4fGRRTMWQofcgaiGpAHYMaPMiYtNv",
     "currencyFormat": "#,##0.00",
@@ -2030,7 +2030,7 @@ async function errorHandler(error, event) {
 
 const rootDir = "C:/Users/User/source/repos/JourneyTogetherWeb";
 
-const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[],"title":"Loading App..."};
+const appHead = {"meta":[{"name":"viewport","content":"width=device-width, initial-scale=1"},{"charset":"utf-8"}],"link":[],"style":[],"script":[],"noscript":[],"title":"Journey Together"};
 
 const appRootTag = "div";
 
@@ -2135,7 +2135,22 @@ const plugins = [
 _wH6JrtIxmaSoA8lCPWFnE9z4lQeXW6H5z3l5aymEQw
 ];
 
-const assets = {};
+const assets = {
+  "/index.mjs": {
+    "type": "text/javascript; charset=utf-8",
+    "etag": "\"1a408-9PFZUcjFsuGlvZ3sfurDh/CQlIU\"",
+    "mtime": "2026-03-14T14:15:37.267Z",
+    "size": 107528,
+    "path": "index.mjs"
+  },
+  "/index.mjs.map": {
+    "type": "application/json",
+    "etag": "\"6b5ff-g2R02QHHOdsvj0JeAmd9jkJ5dgM\"",
+    "mtime": "2026-03-14T14:15:37.267Z",
+    "size": 439807,
+    "path": "index.mjs.map"
+  }
+};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));

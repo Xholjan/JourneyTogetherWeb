@@ -1,0 +1,1 @@
+import{j as a,ab as t,c as n,a as o,o as r}from"./Cd4Hx30b.js";const c={__name:"[...slug]",setup(s){return a(()=>{t("/",{replace:!0})}),(l,e)=>(r(),n("div",null,[...e[0]||(e[0]=[o("p",null,"Page not found. Redirecting...",-1)])]))}};export{c as default};
