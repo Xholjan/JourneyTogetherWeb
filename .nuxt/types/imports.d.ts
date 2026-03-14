@@ -100,7 +100,6 @@ declare global {
   const updateAppConfig: typeof import('../../node_modules/nuxt/dist/app/config').updateAppConfig
   const useActivity: typeof import('../../composables/useActivity').useActivity
   const useAnnouncer: typeof import('../../node_modules/nuxt/dist/app/composables/announcer').useAnnouncer
-  const useApi: typeof import('../../composables/useApi').useApi
   const useApiPayload: typeof import('../../composables/common/useApiPayload').useApiPayload
   const useAppConfig: typeof import('../../node_modules/nuxt/dist/app/config').useAppConfig
   const useAsyncData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').useAsyncData
@@ -325,7 +324,6 @@ declare module 'vue' {
     readonly updateAppConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/config')['updateAppConfig']>
     readonly useActivity: UnwrapRef<typeof import('../../composables/useActivity')['useActivity']>
     readonly useAnnouncer: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/announcer')['useAnnouncer']>
-    readonly useApi: UnwrapRef<typeof import('../../composables/useApi')['useApi']>
     readonly useApiPayload: UnwrapRef<typeof import('../../composables/common/useApiPayload')['useApiPayload']>
     readonly useAppConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/config')['useAppConfig']>
     readonly useAsyncData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useAsyncData']>

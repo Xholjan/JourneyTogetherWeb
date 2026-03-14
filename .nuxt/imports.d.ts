@@ -32,7 +32,6 @@ export { setInterval } from '#app/compat/interval';
 export { definePageMeta, PageMeta } from '#app/composables/pages';
 export { defineLazyHydrationComponent } from '#app/composables/lazy-hydration';
 export { useActivity } from '../composables/useActivity';
-export { useApi } from '../composables/useApi';
 export { useJourneys } from '../composables/useJourneys';
 export { useVerifications, usePersonDocs, useDeleteDoc, useUploadDoc, usePersonVerification, modifyPersonVerification, useUpdateDocType } from '../composables/useVerifications';
 export { useApiPayload } from '../composables/common/useApiPayload';
