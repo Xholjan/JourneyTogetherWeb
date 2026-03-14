@@ -1,1 +1,0 @@
-import{ad as n,B as o,A as c}from"./CEHw2538.js";const _={__name:"index",setup(a){const{loginWithRedirect:e}=n(),t=()=>{e()};return(r,s)=>(c(),o("button",{onClick:t},"Log In"))}};export{_ as default};

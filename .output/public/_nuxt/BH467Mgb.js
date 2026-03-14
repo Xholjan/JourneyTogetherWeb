@@ -1,1 +1,0 @@
-import{o as n,n as t,B as a,C as o,A as r}from"./CEHw2538.js";const p={__name:"[...slug]",setup(s){return n(()=>{t("/",{replace:!0})}),(l,e)=>(r(),a("div",null,[...e[0]||(e[0]=[o("p",null,"Page not found. Redirecting...",-1)])]))}};export{p as default};

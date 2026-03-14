@@ -1,1 +1,0 @@
-import{ad as s,u as n,M as r,B as u,A as i}from"./CEHw2538.js";const p={__name:"callback",setup(l){const{isAuthenticated:t,isLoading:c}=s(),o=n();return r([c,t],([e,a])=>{!e&&a&&o.replace("/")}),(e,a)=>(i(),u("div",null,"Logging you in..."))}};export{p as default};
