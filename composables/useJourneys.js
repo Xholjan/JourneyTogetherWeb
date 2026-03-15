@@ -5,16 +5,15 @@ export const useJourneys = () => {
     const auth0 = useAuth0();
 
     const getJourneys = async (page = 1, pageSize = 10) => {
-
         const token = await auth0.getAccessTokenSilently({
-            audience: 'https://api.journeytogether.com'
+            audience: 'https://api.journeytogether.com',
+            scope: 'openid profile email offline_access',
+            detailedResponse: true,
         });
 
         const response = await $axios.get('/api/journeys', {
             params: { page, pageSize },
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
+            headers: { Authorization: "Bearer " + token.access_token },
         });
         return response;
     };

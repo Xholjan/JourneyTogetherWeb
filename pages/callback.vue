@@ -11,5 +11,5 @@ watch([isLoading, isAuthenticated], ([loading, authenticated]) => {
 
 </script>
 <template>
-    <div>Logging you in...</div>
+    <CommonLoader v-if="isLoading" />
 </template>
