@@ -18,7 +18,6 @@ const todayLocal = () => {
     return local.toISOString().slice(0, 16);
 };
 
-// Form
 const form = ref({
     startLocation: '',
     arrivalLocation: '',
@@ -59,8 +58,6 @@ const submit = async () => {
         }
         emit('refresh');
         close();
-    } catch (e) {
-        console.error(e);
     } finally {
         isLoading.value = false;
     }

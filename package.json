@@ -12,6 +12,8 @@
   "dependencies": {
     "@auth0/auth0-vue": "^2.5.0",
     "@bootstrap-vue-next/nuxt": "^0.43.8",
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "@microsoft/signalr": "^10.0.0",
     "@nuxtjs/i18n": "^9.5.5",
     "@vueform/multiselect": "^2.6.11",
     "@vuepic/vue-datepicker": "^11.0.2",

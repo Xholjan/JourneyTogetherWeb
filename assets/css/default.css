@@ -236,3 +236,10 @@ body {
   background: var(--smoky-rose);
   color: var(--white);
 }
+
+.fixed-card-body {
+    height: 144px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

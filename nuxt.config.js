@@ -15,6 +15,17 @@ export default defineNuxtConfig({
       dateTimeFormat: "dd/MM/yyyy HH:mm",
     },
   },
+  vite: {
+    optimizeDeps: {
+      include: [
+        'bootstrap-vue-next',
+        'axios',
+        '@auth0/auth0-vue',
+        'bootstrap-vue-next/components/BTable',
+        'bootstrap-vue-next/components/BPagination',
+      ]
+    }
+  },
   app: {
     head: {
       title: "Journey Together",
@@ -40,6 +51,10 @@ export default defineNuxtConfig({
     },
     {
       src: "~/plugins/toast.js",
+      mode: "client",
+    },
+    {
+      src: "~/plugins/signalr.js",
       mode: "client",
     },
   ],

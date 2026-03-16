@@ -9,8 +9,26 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 
   api.interceptors.response.use(
-    (response) => response.data, () => {
-      return null;
+    (response) => response.data,
+    (error) => {
+      if (error.response) {
+        if (error.response.status === 400) {
+
+          const errors = error.response.data?.errors;
+
+          if (errors) {
+            Object.values(errors).forEach((messages) => {
+              messages.forEach((message) => {
+                nuxtApp.$toast.warning(message);
+              });
+            });
+          }
+        }
+      } else {
+        console.error("Error:", error);
+      }
+
+      return Promise.reject(error);
     }
   );
 

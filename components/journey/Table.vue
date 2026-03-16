@@ -2,13 +2,21 @@
 import { ref, watch, onMounted } from 'vue'
 import { useJourneys } from '~/composables/useJourneys'
 
+const props = defineProps({
+    refresh: {
+        type: Number,
+        default: 0
+    }
+})
+
+const emit = defineEmits(['select'])
 const { getJourneys } = useJourneys()
 const items = ref([])
 const totalRows = ref(0)
 const currentPage = ref(1)
 const perPage = ref(10)
 const isLoading = ref(false)
-const perPageOptions = [10, 15, 20] // Options for rows per page
+const perPageOptions = [10, 15, 20]
 
 const columns = [
     { key: 'id', label: 'ID', sortable: true },
@@ -23,12 +31,18 @@ const columns = [
 const loadData = async () => {
     isLoading.value = true
     const response = await getJourneys(currentPage.value, perPage.value)
-    items.value = response && response.length ? response : []
-    totalRows.value = response ? response.length : 0
+    items.value = response ? response.items : []
+    totalRows.value = response ? response.totalItems : 0
     isLoading.value = false
 }
 
 watch([currentPage, perPage], loadData)
+
+watch(() => props.refresh, () => {
+    currentPage.value = 1
+    loadData()
+})
+
 onMounted(loadData)
 
 const transportTypeLabel = (type) => {
@@ -39,11 +53,16 @@ const transportTypeLabel = (type) => {
         default: return 'Other'
     }
 }
+
+const onRowClicked = (selected) => {
+    emit('select', selected.item.id)
+}
 </script>
 
 <template>
     <div class="journey-table">
-        <b-table :items="items" :fields="columns" :busy="isLoading" striped hover responsive class="table-theme">
+        <b-table :items="items" :fields="columns" :busy="isLoading" striped hover responsive class="table-theme"
+            @row-clicked="onRowClicked">
             <template #cell(startTime)="data">
                 {{ new Date(data.value).toLocaleString() }}
             </template>
@@ -69,7 +88,7 @@ const transportTypeLabel = (type) => {
             </div>
 
             <b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" align="right"
-                variant="secondary" />
+                variant="secondary" limit="2" />
         </div>
     </div>
 </template>

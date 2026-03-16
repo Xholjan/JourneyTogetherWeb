@@ -17,6 +17,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
+import '@fortawesome/fontawesome-free/css/all.css'
 
 const toasts = ref([]);
 let id = 0;
