@@ -46,11 +46,9 @@ export const useJourneys = () => {
             TransportType: form.transportType,
             DistanceKm: form.distanceKm,
         };
-
-        const response = await $axios.post('/api/journeys', data, {
+        await $axios.post('/api/journeys', data, {
             headers: { Authorization: "Bearer " + token.access_token },
         });
-        return response;
     };
 
     const updateJourney = async (journeyId, form) => {
@@ -69,26 +67,76 @@ export const useJourneys = () => {
             TransportType: form.transportType,
             DistanceKm: form.distanceKm,
         };
-
-        const response = await $axios.put(`/api/journeys/${journeyId}`, data, {
+        await $axios.put(`/api/journeys/${journeyId}`, data, {
             headers: { Authorization: "Bearer " + token.access_token },
         });
-        return response;
     };
 
-    const deleteJourney = async (journeyId, form) => {
+    const deleteJourney = async (journeyId) => {
+        const token = await auth0.getAccessTokenSilently({
+            audience: 'https://api.journeytogether.com',
+            scope: 'openid profile email offline_access',
+            detailedResponse: true,
+        });
+        await $axios.delete(`/api/journeys/${journeyId}`, {
+            headers: { Authorization: "Bearer " + token.access_token },
+        });
+    };
+
+    const shareJourney = async (journeyId, form) => {
+        const token = await auth0.getAccessTokenSilently({
+            audience: 'https://api.journeytogether.com',
+            scope: 'openid profile email offline_access',
+            detailedResponse: true,
+        });
+        await $axios.post(`/api/journeys/${journeyId}/share`, form.ids, {
+            headers: { Authorization: "Bearer " + token.access_token },
+        });
+    };
+
+    const publicLinkJourney = async (journeyId) => {
         const token = await auth0.getAccessTokenSilently({
             audience: 'https://api.journeytogether.com',
             scope: 'openid profile email offline_access',
             detailedResponse: true,
         });
 
-        const response = await $axios.delete(`/api/journeys/${journeyId}`, {
+        const response = await $axios.post(`/api/journeys/${journeyId}/public-link`, null, {
             headers: { Authorization: "Bearer " + token.access_token },
         });
         return response;
     };
 
+    const getPublicJourneyById = async (id) => {
+        const response = await $axios.get(`/api/public/${id}`);
+        return response;
+    };
 
-    return { getJourneys, getJourneyById, createJourney, updateJourney, deleteJourney };
+    const addFavourite = async (journeyId) => {
+        const token = await auth0.getAccessTokenSilently({
+            audience: 'https://api.journeytogether.com',
+            scope: 'openid profile email offline_access',
+            detailedResponse: true,
+        });
+
+        const response = await $axios.post(`/api/journeys/${journeyId}/favourite`, null, {
+            headers: { Authorization: "Bearer " + token.access_token },
+        });
+        return response;
+    };
+
+    const removeFavourite = async (journeyId) => {
+        const token = await auth0.getAccessTokenSilently({
+            audience: 'https://api.journeytogether.com',
+            scope: 'openid profile email offline_access',
+            detailedResponse: true,
+        });
+
+        const response = await $axios.delete(`/api/journeys/${journeyId}/favourite`, {
+            headers: { Authorization: "Bearer " + token.access_token },
+        });
+        return response;
+    };
+
+    return { getJourneys, getJourneyById, createJourney, updateJourney, deleteJourney, shareJourney, publicLinkJourney, getPublicJourneyById, addFavourite, removeFavourite };
 };

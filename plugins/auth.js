@@ -8,6 +8,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     clientId: config.public.auth0ClientId,
     authorizationParams: {
       redirect_uri: window.location.origin + '/callback',
+      audience: 'https://api.journeytogether.com',
       scope: 'openid profile email offline_access',
     },
     cacheLocation: 'localstorage',

@@ -2,6 +2,7 @@
 import { ref, onMounted, watch } from 'vue';
 import { useJourneys } from '~/composables/useJourneys';
 
+const { $toast } = useNuxtApp();
 const emit = defineEmits(['close', 'refresh']);
 const props = defineProps({ journeyId: { type: Number, required: true } });
 
@@ -49,6 +50,10 @@ onMounted(loadJourney);
 watch(() => props.journeyId, loadJourney);
 
 const submit = async () => {
+    if (!form.value.startTime || !form.value.arrivalTime) {
+        $toast.warning('Please fill in all required dates.')
+        return;
+    }
     isLoading.value = true;
     try {
         if (props.journeyId === 0) {
@@ -121,7 +126,7 @@ const close = () => {
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-success" @click="submit" :disabled="isLoading">
-                                {{ props.journeyId === 0 ? 'Create' : 'Update' }}
+                                Submit
                             </button>
                         </div>
                     </div>

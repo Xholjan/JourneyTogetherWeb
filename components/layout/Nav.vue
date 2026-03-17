@@ -1,6 +1,15 @@
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue'
 const { isAuthenticated, loginWithRedirect, logout } = useAuth0()
+const { $signalr } = useNuxtApp();
+
+watch(isAuthenticated, async (value) => {
+
+    if (value) {
+        await $signalr.start();
+    }
+
+}, { immediate: true });
 </script>
 
 <template>

@@ -1,16 +1,22 @@
 <script setup>
 import { ref } from 'vue';
 import { useAuth0 } from '@auth0/auth0-vue'
+import { useRoute } from 'vue-router';
 
+const { $toast } = useNuxtApp();
 const { isAuthenticated } = useAuth0()
-const { getJourneyById, deleteJourney } = useJourneys();
-const showModal = ref(false)
+const { getJourneyById, deleteJourney, publicLinkJourney, getPublicJourneyById, addFavourite, removeFavourite } = useJourneys();
+const showJourneyModal = ref(false)
+const showShareModal = ref(false)
 const selectedJourneyId = ref(0)
 const refreshCounter = ref(0)
 const journey = ref(null)
+const publicJourney = ref(null)
+const publicLink = ref(null)
+const publicJourneyId = ref(null)
+const route = useRoute();
 
 const triggerRefresh = () => {
-    debugger
     refreshCounter.value++
     if (selectedJourneyId.value > 0) {
         handleSelect(selectedJourneyId.value)
@@ -20,12 +26,14 @@ const triggerRefresh = () => {
 }
 
 const handleSelect = async (journeyId) => {
+    publicLink.value = null
+    publicJourney.value = null
     journey.value = await getJourneyById(journeyId);
 }
 
 const addJourney = () => {
     selectedJourneyId.value = 0
-    showModal.value = true
+    showJourneyModal.value = true
 }
 
 const transportTypeLabel = (type) => {
@@ -37,40 +45,90 @@ const transportTypeLabel = (type) => {
     }
 }
 
-const toggleFavourite = (id) => {
-    console.log("Toggle favourite for journey", id)
+const addFavouriteAction = async (id) => {
+    await addFavourite(id)
+    await handleSelect(id)
+}
+
+const removeFavouriteAction = async (id) => {
+    await removeFavourite(id)
+    await handleSelect(id)
 }
 
 const editJourney = (id) => {
     selectedJourneyId.value = id
-    showModal.value = true
+    showJourneyModal.value = true
 }
 
-const deleteJourneyAction = (id) => {
-    deleteJourney(id)
+const deleteJourneyAction = async (id) => {
+    await deleteJourney(id)
     selectedJourneyId.value = 0
     triggerRefresh()
 }
 
 const shareJourney = (id) => {
-    console.log("Share journey", id)
+    selectedJourneyId.value = id
+    showShareModal.value = true
+    journey.value = null
 }
 
-const copyLink = (id) => {
-    const url = `${window.location.origin}/journeys/${id}`
-    navigator.clipboard.writeText(url)
-    console.log("Copied link:", url)
+const publicLinkAction = async (id) => {
+    const link = await publicLinkJourney(id)
+    publicLink.value = "http://localhost:3000/" + link
 }
+
+const copyLink = async () => {
+    if (publicLink.value) {
+        await navigator.clipboard.writeText(publicLink.value)
+        $toast.success('Link copied to clipboard!')
+    }
+}
+
+onMounted(async () => {
+    const pj = route.query.pj;
+    if (pj) {
+        publicJourneyId.value = pj;
+        publicJourney.value = await getPublicJourneyById(publicJourneyId.value);
+    }
+});
 </script>
 
 <template>
     <div>
         <CommonCard containerClass="m-3">
-            <div v-if="journey == null"
-                class="page-title fixed-card-body d-flex flex-column justify-content-center align-items-center text-center">
-                <h1 class="gradient-welcome w-100">Welcome</h1>
-                <h6 v-if="isAuthenticated.valueOf()" class="gradient-welcome w-100">Select a journey to view details
-                </h6>
+            <div v-if="journey == null">
+                <div v-if="publicJourney == null"
+                    class="page-title fixed-card-body d-flex flex-column justify-content-center align-items-center text-center">
+                    <h1 class="gradient-welcome w-100">Welcome</h1>
+                    <h6 v-if="isAuthenticated.valueOf()" class="gradient-welcome w-100">Select a journey to view details
+                    </h6>
+                </div>
+                <div v-else>
+                    <div class="container border bg-light mt-3 p-3 rounded">
+                        <div class="row text-center align-items-center">
+                            <div class="col border-end py-2">
+                                {{ publicJourney.startLocation }}
+                            </div>
+                            <div class="col border-end py-2">
+                                {{ publicJourney.arrivalLocation }}
+                            </div>
+                            <div class="col py-2">
+                                {{ transportTypeLabel(publicJourney.transportType) }}
+                            </div>
+                        </div>
+                        <div class="row text-center align-items-center">
+                            <div class="col border-end py-2">
+                                {{ new Date(publicJourney.startTime).toLocaleString() }}
+                            </div>
+                            <div class="col border-end py-2">
+                                {{ new Date(publicJourney.arrivalTime).toLocaleString() }}
+                            </div>
+                            <div class="col py-2">
+                                {{ publicJourney.distanceKm }} km
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div v-else class="page-title fixed-card-body">
                 <div class="container border bg-light mt-3 p-3 rounded">
@@ -90,12 +148,13 @@ const copyLink = (id) => {
                             </button>
                         </div>
                         <div class="col border-end py-2">
-                            <button class="btn btn-outline-secondary btn-sm" @click="copyLink(journey.id)">
+                            <button class="btn btn-outline-secondary btn-sm" @click="publicLinkAction(journey.id)">
                                 <i class="fas fa-link"></i>
                             </button>
                         </div>
                         <div class="col py-2">
-                            <button class="btn btn-outline-success btn-sm" @click="toggleFavourite(journey.id)">
+                            <button class="btn btn-outline-success btn-sm"
+                                @click="journey.isFavourite ? removeFavouriteAction(journey.id) : addFavouriteAction(journey.id)">
                                 <i :class="journey.isFavourite ? 'fas fa-heart text-danger' : 'far fa-heart'"></i>
                             </button>
                         </div>
@@ -124,6 +183,17 @@ const copyLink = (id) => {
                             <!-- Empty cell -->
                         </div>
                     </div>
+
+                    <div v-if="publicLink" class="row text-center align-items-center mt-3">
+                        <div class="col-8 text-truncate" style="max-width: 70%;">
+                            {{ publicLink }}
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-outline-primary btn-sm" @click="copyLink">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </CommonCard>
@@ -142,6 +212,9 @@ const copyLink = (id) => {
         </CommonCard>
     </div>
 
-    <JourneyModal v-if="showModal" @close="showModal = false" @refresh="triggerRefresh"
+    <JourneyModal v-if="showJourneyModal" @close="showJourneyModal = false" @refresh="triggerRefresh"
+        :journeyId="selectedJourneyId" />
+
+    <ShareModal v-if="showShareModal" @close="showShareModal = false" @refresh="triggerRefresh"
         :journeyId="selectedJourneyId" />
 </template>
