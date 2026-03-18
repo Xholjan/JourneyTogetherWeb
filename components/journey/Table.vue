@@ -47,10 +47,12 @@ onMounted(loadData)
 
 const transportTypeLabel = (type) => {
     switch (type) {
-        case 1: return 'Car'
-        case 2: return 'Bike'
-        case 3: return 'Walk'
-        default: return 'Other'
+        case 0: return 'Car'
+        case 1: return 'Bus'
+        case 2: return 'Train'
+        case 3: return 'Plane'
+        case 4: return 'Bike'
+        case 5: return 'Walk'
     }
 }
 
@@ -62,7 +64,7 @@ const onRowClicked = (selected) => {
 <template>
     <div class="journey-table">
         <b-table :items="items" :fields="columns" :busy="isLoading" striped hover responsive class="table-theme"
-            @row-clicked="onRowClicked">
+            @row-clicked="onRowClicked" show-empty>
             <template #cell(startTime)="data">
                 {{ new Date(data.value).toLocaleString() }}
             </template>
@@ -72,11 +74,8 @@ const onRowClicked = (selected) => {
             <template #cell(transportType)="data">
                 {{ transportTypeLabel(data.value) }}
             </template>
-
             <template #empty>
-                <div class="text-center p-3 text-muted">
-                    You need to travel more
-                </div>
+                <h6>You need to travel more</h6>
             </template>
         </b-table>
 

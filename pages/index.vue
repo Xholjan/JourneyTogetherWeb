@@ -47,11 +47,13 @@ const transportTypeLabel = (type) => {
 
 const addFavouriteAction = async (id) => {
     await addFavourite(id)
+    $toast.success('Done!')
     await handleSelect(id)
 }
 
 const removeFavouriteAction = async (id) => {
     await removeFavourite(id)
+    $toast.success('Done!')
     await handleSelect(id)
 }
 
@@ -62,6 +64,7 @@ const editJourney = (id) => {
 
 const deleteJourneyAction = async (id) => {
     await deleteJourney(id)
+    $toast.success('Done!')
     selectedJourneyId.value = 0
     triggerRefresh()
 }
@@ -75,6 +78,7 @@ const shareJourney = (id) => {
 const publicLinkAction = async (id) => {
     const link = await publicLinkJourney(id)
     publicLink.value = "http://localhost:3000/" + link
+    $toast.success('Link Created!')
 }
 
 const copyLink = async () => {
@@ -100,7 +104,11 @@ onMounted(async () => {
                 <div v-if="publicJourney == null"
                     class="page-title fixed-card-body d-flex flex-column justify-content-center align-items-center text-center">
                     <h1 class="gradient-welcome w-100">Welcome</h1>
-                    <h6 v-if="isAuthenticated.valueOf()" class="gradient-welcome w-100">Select a journey to view details
+                    <h6 v-if="isAuthenticated.valueOf()" class="gradient-welcome w-100">
+                        Select a journey for details
+                    </h6>
+                    <h6 v-else class="gradient-welcome w-100">
+                        Log in to view your journeys
                     </h6>
                 </div>
                 <div v-else>
@@ -143,19 +151,22 @@ onMounted(async () => {
                             {{ transportTypeLabel(journey.transportType) }}
                         </div>
                         <div class="col border-end py-2">
-                            <button class="btn btn-outline-primary btn-sm" @click="editJourney(journey.id)">
+                            <button class="btn btn-outline-secondary btn-sm" @click="editJourney(journey.id)"
+                                title="Edit">
                                 <i class="fas fa-edit"></i>
                             </button>
                         </div>
                         <div class="col border-end py-2">
-                            <button class="btn btn-outline-secondary btn-sm" @click="publicLinkAction(journey.id)">
-                                <i class="fas fa-link"></i>
+                            <button class="btn btn-outline-secondary btn-sm"
+                                @click="journey.isFavourite ? removeFavouriteAction(journey.id) : addFavouriteAction(journey.id)"
+                                :title="journey.isFavourite ? 'Unfavourite' : 'Favourite'">
+                                <i :class="journey.isFavourite ? 'fas fa-heart text-danger' : 'far fa-heart'"></i>
                             </button>
                         </div>
                         <div class="col py-2">
-                            <button class="btn btn-outline-success btn-sm"
-                                @click="journey.isFavourite ? removeFavouriteAction(journey.id) : addFavouriteAction(journey.id)">
-                                <i :class="journey.isFavourite ? 'fas fa-heart text-danger' : 'far fa-heart'"></i>
+                            <button class="btn btn-outline-secondary btn-sm" @click="publicLinkAction(journey.id)"
+                                title="Public Link">
+                                <i class="fas fa-link"></i>
                             </button>
                         </div>
                     </div>
@@ -170,27 +181,21 @@ onMounted(async () => {
                             {{ journey.distanceKm }} km
                         </div>
                         <div class="col border-end py-2">
-                            <button class="btn btn-outline-danger btn-sm" @click="deleteJourneyAction(journey.id)">
+                            <button class="btn btn-outline-secondary btn-sm" @click="deleteJourneyAction(journey.id)"
+                                title="Delete">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
                         <div class="col border-end py-2">
-                            <button class="btn btn-outline-info btn-sm" @click="shareJourney(journey.id)">
+                            <button class="btn btn-outline-secondary btn-sm" @click="shareJourney(journey.id)"
+                                title="Share">
                                 <i class="fas fa-share-alt"></i>
                             </button>
                         </div>
                         <div class="col py-2">
-                            <!-- Empty cell -->
-                        </div>
-                    </div>
-
-                    <div v-if="publicLink" class="row text-center align-items-center mt-3">
-                        <div class="col-8 text-truncate" style="max-width: 70%;">
-                            {{ publicLink }}
-                        </div>
-                        <div class="col-4">
-                            <button class="btn btn-outline-primary btn-sm" @click="copyLink">
-                                <i class="fas fa-copy"></i> Copy
+                            <button v-if="publicLink" class="btn btn-outline-secondary btn-sm" @click="copyLink"
+                                title="Copy">
+                                <i class="fas fa-copy"></i>
                             </button>
                         </div>
                     </div>

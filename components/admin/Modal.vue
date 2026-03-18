@@ -1,49 +1,36 @@
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue'
-import Multiselect from '@vueform/multiselect'
-import '@vueform/multiselect/themes/default.css'
+import { ref, onMounted } from 'vue'
 import { useUsers } from '../../composables/useUsers'
-import { useJourneys } from '../../composables/useJourneys'
 
 const { $toast } = useNuxtApp();
 const emit = defineEmits(['close', 'refresh'])
-const props = defineProps({
-    journeyId: { type: Number, required: true }
-})
-
-const { shareJourney } = useJourneys()
 const { getUsers } = useUsers()
-
+const { updateUser } = useAdmin()
 const users = ref([])
 const isLoading = ref(false)
 const shown = ref(true)
 
 const form = ref({
-    ids: []
+    id: null,
+    status: null,
 })
 
-const userOptions = computed(() =>
-    users.value.map(u => ({
-        value: u.id,
-        label: `${u.firstName} ${u.lastName} (${u.email})`
-    }))
-)
-
 const loadUsers = async () => {
-    if (props.journeyId > 0) {
-        isLoading.value = true
-        users.value = await getUsers()
-        isLoading.value = false
-    }
+    isLoading.value = true
+    users.value = await getUsers()
+    isLoading.value = false
 }
 
 onMounted(loadUsers)
-watch(() => props.journeyId, loadUsers)
 
 const submit = async () => {
+    if (form.value.id === null || form.value.status === null) {
+        $toast.warning('Please select a user and a status!')
+        return
+    }
     isLoading.value = true
     try {
-        await shareJourney(props.journeyId, form.value)
+        await updateUser(form.value.id, form.value.status)
         $toast.success('Done!')
         emit('refresh')
         close()
@@ -70,15 +57,23 @@ const close = () => {
                             <h5 class="modal-title">Share Journey</h5>
                             <button class="btn-close" @click="close"></button>
                         </div>
-                        <div class="modal-body">
-                            <label class="form-label">Select users to share with</label>
-                            <Multiselect v-model="form.ids" :options="userOptions" mode="tags" valueProp="value"
-                                label="label" :searchable="true" :close-on-select="false"
-                                placeholder="Search users..." />
+                        <div class="modal-body row g-3">
+                            <select v-model="form.id" class="form-select">
+                                <option :value="null">Choose User</option>
+                                <option v-for="user in users" :key="user.id" :value="user.id">
+                                    {{ user.firstName }} {{ user.lastName }}
+                                </option>
+                            </select>
+
+                            <select v-model="form.status" class="form-select">
+                                <option :value="null">Choose Status</option>
+                                <option :value="0">Active</option>
+                                <option :value="1">Suspended</option>
+                                <option :value="2">Deactivated</option>
+                            </select>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-outline-success" @click="submit"
-                                :disabled="isLoading || form.ids.length === 0">
+                            <button class="btn btn-outline-success" @click="submit" :disabled="isLoading">
                                 Submit
                             </button>
                         </div>

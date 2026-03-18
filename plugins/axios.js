@@ -13,9 +13,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     (error) => {
       if (error.response) {
         if (error.response.status === 400) {
-
           const errors = error.response.data?.errors;
-
           if (errors) {
             Object.values(errors).forEach((messages) => {
               messages.forEach((message) => {
@@ -23,6 +21,8 @@ export default defineNuxtPlugin((nuxtApp) => {
               });
             });
           }
+        } else if (error.response.status === 403) {
+          window.location.href = "/";
         }
       } else {
         console.error("Error:", error);

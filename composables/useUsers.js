@@ -18,5 +18,18 @@ export const useUsers = () => {
         return response;
     };
 
-    return { getUsers };
+    const syncUser = async () => {
+        const token = await auth0.getAccessTokenSilently({
+            audience: 'https://api.journeytogether.com',
+            scope: 'openid profile email offline_access',
+            detailedResponse: true,
+        });
+
+        const response = await $axios.post('/api/users/sync', null, {
+            headers: { Authorization: "Bearer " + token.access_token },
+        });
+        return response;
+    };
+
+    return { getUsers, syncUser };
 };

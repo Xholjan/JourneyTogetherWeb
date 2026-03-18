@@ -40,7 +40,7 @@ const loadJourney = async () => {
             arrivalLocation: '',
             startTime: todayLocal(),
             arrivalTime: todayLocal(),
-            transportType: 1,
+            transportType: 0,
             distanceKm: 0
         };
     }
@@ -61,6 +61,7 @@ const submit = async () => {
         } else {
             await updateJourney(props.journeyId, form.value);
         }
+        $toast.success('Done!')
         emit('refresh');
         close();
     } finally {
@@ -110,10 +111,12 @@ const close = () => {
                                 <div class="col-12 col-md-6">
                                     <label class="form-label">Transport Type</label>
                                     <select v-model="form.transportType" class="form-select">
-                                        <option :value="1">Car</option>
-                                        <option :value="2">Bike</option>
-                                        <option :value="3">Walk</option>
-                                        <option :value="4">Other</option>
+                                        <option :value="0">Car</option>
+                                        <option :value="1">Bus</option>
+                                        <option :value="2">Train</option>
+                                        <option :value="3">Plane</option>
+                                        <option :value="4">Bike</option>
+                                        <option :value="5">Walk</option>
                                     </select>
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -125,7 +128,7 @@ const close = () => {
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-success" @click="submit" :disabled="isLoading">
+                            <button type="button" class="btn btn-outline-success" @click="submit" :disabled="isLoading">
                                 Submit
                             </button>
                         </div>
