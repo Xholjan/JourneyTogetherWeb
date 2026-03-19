@@ -65,6 +65,7 @@ watch(() => props.refresh, () => {
     currentPage.value = 1
     loadData()
 })
+
 onMounted(() => {
     loadData()
     loadUsers()

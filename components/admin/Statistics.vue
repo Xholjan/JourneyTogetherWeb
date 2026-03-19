@@ -11,12 +11,14 @@ const props = defineProps({
 
 const emit = defineEmits(['select'])
 const { getStatistics } = useAdmin()
+const { getUsers } = useUsers()
 const items = ref([])
 const totalRows = ref(0)
 const currentPage = ref(1)
 const perPage = ref(10)
 const isLoading = ref(false)
 const perPageOptions = [10, 15, 20]
+const users = ref([])
 
 const columns = [
     { key: 'userId', label: 'User', sortable: true },
@@ -40,6 +42,13 @@ const loadData = async () => {
     isLoading.value = false
 }
 
+const loadUsers = async () => {
+    isLoading.value = true
+    users.value = await getUsers()
+    debugger
+    isLoading.value = false
+}
+
 watch([currentPage, perPage], loadData)
 
 watch(() => props.refresh, () => {
@@ -47,7 +56,10 @@ watch(() => props.refresh, () => {
     loadData()
 })
 
-onMounted(loadData)
+onMounted(() => {
+    loadData()
+    loadUsers()
+})
 
 const onRowClicked = (selected) => {
     emit('select', selected.item.id)
@@ -70,6 +82,12 @@ const resetFilters = () => {
 
     currentPage.value = 1
     loadData()
+}
+
+const getUserName = (id) => {
+    if (id === 1) return 'Admin'
+    const user = users.value.find(u => u.id === id)
+    return user ? user.firstName + ' ' + user.lastName : 'Unknown'
 }
 </script>
 
@@ -108,6 +126,12 @@ const resetFilters = () => {
         </div>
         <b-table :items="items" :fields="columns" :busy="isLoading" striped hover responsive class="table-theme"
             @row-clicked="onRowClicked" show-empty>
+            <template #cell(userId)="data">
+                <span>
+                    {{ getUserName(data.item.userId) }}
+                </span>
+            </template>
+
             <template #empty>
                 <h6>You need to travel more</h6>
             </template>
