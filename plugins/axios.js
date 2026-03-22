@@ -12,7 +12,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     (response) => response.data,
     (error) => {
       if (error.response) {
-        if (error.response.status === 400) {
+        if (error.response.status === 400 || error.response.status === 410) {
           const errors = error.response.data?.errors;
           if (errors) {
             Object.values(errors).forEach((messages) => {
