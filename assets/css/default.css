@@ -1,10 +1,10 @@
 ﻿:root {
   /* Palette */
-  --charcoal-blue: #424b54;
+  --charcoal-blue: #05164d;
   --cool-steel: #93a8ac;
   --white: #ffffff;
-  --soft-blossom: #e2b4bd;
-  --smoky-rose: #9b6a6c;
+  --soft-blossom: #ffbd32;
+  --smoky-rose: #ffad00;
 
   /* Theme usage */
   --bg-page: var(--white);
@@ -212,9 +212,7 @@ body {
 
 .gradient-welcome {
     background: linear-gradient(
-        90deg,
-        var(--charcoal-blue),
-        var(--smoky-rose)
+        var(--charcoal-blue)
     );
     -webkit-background-clip: text;
     background-clip: text;
