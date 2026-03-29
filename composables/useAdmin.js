@@ -26,18 +26,18 @@ export const useAdmin = () => {
 
         const response = await $axios.get('/api/admin/journeys', {
             params: {
-                id: form.id,
-                transportType: form.transportType,
-                startDateFrom: form.startTimeForm,
-                startDateTo: form.startTimeTo,
-                arrivalDateFrom: form.arrivalTimeFrom,
-                arrivalDateTo: form.arrivalTimeTo,
-                minDistance: form.minDistance,
-                maxDistance: form.maxDistance,
-                pageSize: form.pageSize,
-                page: form.page,
-                orderBy: form.orderBy,
-                direction: form.direction,
+                Id: form.id,
+                TransportType: form.transportType,
+                StartDateFrom: form.startDateFrom,
+                StartDateTo: form.startDateTo,
+                ArrivalDateFrom: form.arrivalDateFrom,
+                ArrivalDateTo: form.arrivalDateTo,
+                MinDistance: form.minDistance,
+                MaxDistance: form.maxDistance,
+                PageSize: form.pageSize,
+                Page: form.page,
+                OrderBy: form.orderBy,
+                Direction: form.direction,
             },
             headers: { Authorization: "Bearer " + token.access_token },
         });
@@ -53,10 +53,10 @@ export const useAdmin = () => {
 
         const response = await $axios.get('/api/admin/statistics/monthly-distance', {
             params: {
-                pageSize: form.pageSize,
-                page: form.page,
-                orderBy: form.orderBy,
-                direction: form.direction,
+                PageSize: form.pageSize,
+                Page: form.page,
+                OrderBy: form.orderBy,
+                Direction: form.direction,
             },
             headers: { Authorization: "Bearer " + token.access_token },
         });

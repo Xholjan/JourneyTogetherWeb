@@ -38,10 +38,12 @@ const addJourney = () => {
 
 const transportTypeLabel = (type) => {
     switch (type) {
-        case 1: return 'Car'
-        case 2: return 'Bike'
-        case 3: return 'Walk'
-        default: return 'Other'
+        case 0: return 'Car'
+        case 1: return 'Bus'
+        case 2: return 'Train'
+        case 3: return 'Plane'
+        case 4: return 'Bike'
+        case 5: return 'Walk'
     }
 }
 
